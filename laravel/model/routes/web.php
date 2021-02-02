@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\mainController;
-use App\Http\Controllers\MyController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\OfficerController;
 use App\Http\Controllers\StudInsertController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,11 +39,16 @@ Route::get('/nestedView4', [mainController::class, 'nested3']);
 Route::get('/nestedView5', [mainController::class, 'nested4']);
 Route::get('/create', [mainController::class, 'student_lists']) -> name('student_lists');
 
-Route::get('/list', [MyController::class, 'create']);
-Route::post('/deploy', [MyController::class, 'store'])->name('detail');
-Route::get('/store',[MyController::class, 'index'])->name('details');
+Route::get('/create', [EmployeeController::class, 'create']);
+Route::post('/store', [EmployeeController::class, 'store'])->name('detail');
+Route::get('/lists',[EmployeeController::class, 'index'])->name('details');
+Route::get('/edit/{id}',[EmployeeController::class, 'edit'])->name('edit');
+Route::put('/update/{id}',[EmployeeController::class,'update'])->name('update');
+Route::delete('/delete/{id}',[EmployeeController::class,'destroy'])->name('delete');
 
-
+Route::get('/create',[OfficerController::class, 'create']);
+Route::post('/store',[OfficerController::class, 'store'])->name('store');
+Route::get('/show',[OfficerController::class, 'show'])->name('show');
 
 
 
