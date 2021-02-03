@@ -48,7 +48,17 @@ Route::delete('/delete/{id}',[EmployeeController::class,'destroy'])->name('delet
 
 Route::get('/create',[OfficerController::class, 'create']);
 Route::post('/store',[OfficerController::class, 'store'])->name('store');
-Route::get('/show',[OfficerController::class, 'show'])->name('show');
+Route::get('/list',[OfficerController::class, 'index'])->name('list');
+Route::get('/edit/{id}',[OfficerController::class,'edit'])->name('edit');
+Route::put('/update/{id}',[OfficerController::class,'update'])->name('update');
+Route::delete('/delete/{id}',[OfficerController::class,'destroy'])->name('delete');
 
 
 
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use App\Models\Officer;
-
-
+use Illuminate\Support\Facades\Hash;
 
 class OfficerController extends Controller
 {
@@ -17,8 +16,7 @@ class OfficerController extends Controller
             $age[] = $value;
         }
         $state = ['TamilNadu','AndhraPradesh','Kerala','Delhi','Punjab'];
-        return view::make('officerDetail.index',['age' => $age,'state' => $state,'country'=> $country]);
-        
+        return view::make('officerDetail.form',['age' => $age,'state' => $state,'country'=> $country]);
     }
     function store(request $req){
         $officer = new Officer;
@@ -28,57 +26,89 @@ class OfficerController extends Controller
         $officer->City = $req->city;
         $officer->Age = $req->age;
         $officer->Email = $req->email;
-        $officer->Password = $req->password;
+        $officer->Password = Hash::make($req->password);
         $officer->State = $req->state;
         $officer->Country = $req->country;
         $officer->PhoneNumber = $req->phoneNumber;
         $officer->Pincode = $req->pincode; 
         $officer->DOB = $req->dob;
+        $req->validate([
+            'fname' => 'required|min:6|max:10',
+            'lname' => 'required|min:3|max:10',
+            'gender' => 'required|in:male,female',
+            'city' => 'required',
+            'age'=> 'required|min:1',
+            'email' => 'required',
+            'password' => 'required|min:6|regex:/[@!$%]/',
+            'state'=> 'required|min:1',
+            'country' => 'required|min:1',
+            'phoneNumber' => 'required|digits-between:9,11',
+            'pincode'=> 'required|digits:6',
+            'dob'=> 'required',
+        ],[
+            'fname.required' => 'FirstName is Required',
+            'fname.min' => 'Name should be atleast :min characters',
+            'fname.max' => 'Name should not be greater than :max characters',
+            'lname.required' => 'LastName is Required',
+            'lname.min' => 'Name should be atleast :min characters',
+            'lname.max' => 'Name should not be greater than :max characters',
+            'gender.required' => 'Gender is Required',
+            'gender.in' => 'select atleast one gender',
+            'city.required' => 'City name is Required',
+            'age.required' => 'Age is Required',
+            'age.min' => 'Age should be atleast :min characters',
+            'email.required' => 'Email is Required',
+            'password.required' => 'Password is Required',
+            'password.min' => 'Password should be atleast :min characters',
+            'password.regex' => 'Special character is Required',
+            'state.required' => 'State is Required',
+            'state.min' => 'State should be atleast :min characters',
+            'country.required' => 'Country is Required',
+            'country.min' => 'Select the state: min characters',
+            'phoneNumber' => 'PhoneNumber is Required',
+            'phoneNumber.digits' => 'Not a valid PhoneNumber',
+            'pincode.required' => 'Pincode is Required',
+            'pincode.digits' => 'Enter a valid pincode',
+            'dob.required' => 'Enter a valid DateOfBirth',
+        ]);
         $officer->save();
-        return redirect()->route("show")->with("success",'file submitted');
-        /* $req->validate([
-            'FirstName' => 'required|min:6|max:7',
-            'LastName' => 'required|min:1|max:5',
-            'Gender' => 'required|min:1|max:100',
-            'City' => 'required|min:1',
-            'Age'=> 'required|min:1|max:3',
-            'Email' => 'required|min:1|max:100',
-            'Password' => 'required|min:1|max:10',
-            'State'=> 'required|min:1',
-            'Country' => 'required|min:1',
-            'PhoneNumber' => 'required|digits:10',
-            'Pincode'=> 'required|digits:6',
-            'DOB'=> 'required|',
-
-
-
-            ],[
-            'FirstName.required' => 'FirstName is Required',
-            'FirstName.min' => 'Name should be atleast :min characters',
-            'FirstName.max' => 'Name should not be greater than :max characters',
-            'LastName.required' => 'LastName is Required',
-            'LastName.min' => 'Name should be atleast :min characters',
-            'LastName.max' => 'Name should not be greater than :max characters',
-            'City.required' => 'City name is Required',
-            'City.min' => 'Name should be atleast :min characters',
-            'City.max' => 'Name should not be greater than :max characters',
-            ]);  */
-        
+        return redirect()->route("list")->with("success",'file submitted');  
     }
-    function show(){
-
+    function index(){
         $officer = Officer::all();
-        return view::make('officerDetail.show',['users'=>$officer]);
+        $officer = Officer:: orderby("FirstName","desc")->paginate(5);
+        return view::make('officerDetail.list',['users'=>$officer]);
     }
-    function edit(){
+    function edit($id){
+        $country = ['India','USA','UK'];
+        $age=[];
+        for($value=18; $value<50; $value++){
+            $age[] = $value;
+        }
+        $state = ['TamilNadu','AndhraPradesh','Kerala','Delhi','Punjab'];
         $officer = Officer::find($id);
-         return view('officerDetail.edit',['data'=> $officer]);
-
+        return view('officerDetail.edit',['age' => $age,'state' => $state,'country'=> $country,'data'=> $officer]);
     }
-    function update(){
-
+    function update(Request $req, $id){
+        $officer = Officer::find($id);
+        $officer->FirstName = $req->fname;
+        $officer->LastName = $req->lname;
+        $officer->Gender = $req->gender;
+        $officer->City = $req->city;
+        $officer->Age = $req->age;
+        $officer->Email = $req->email;
+        $officer->Password = Hash::make($req->newPassword);
+        $officer->State = $req->state;
+        $officer->Country = $req->country;
+        $officer->PhoneNumber = $req->phoneNumber;
+        $officer->Pincode = $req->pincode; 
+        $officer->DOB = $req->dob;
+        $officer->update();
+        return redirect()->route('list')->with("success",'Updated Successfully');
     }
-    function destroy(){
-
+    function destroy($id){
+        $officer = Officer::find($id);
+        $officer->delete();
+        return redirect()->route('list')->with("success",'file is deleted');
     }
 }
