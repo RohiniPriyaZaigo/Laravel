@@ -20,6 +20,8 @@ class CreateOfficer extends Migration
             $table->string("Gender",191);
             $table->string("City",191);
             $table->integer("Age");
+            $table->string("IdProof");
+            $table->string("Image");
             $table->string("Email",191);
             $table->string("Password",191);
             $table->string("State",191);

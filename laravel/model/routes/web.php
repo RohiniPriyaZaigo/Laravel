@@ -25,7 +25,7 @@ Route::get('/rohini', function () {
     return 'welcome';
     //echo "hello World";
 });
-Route::get('/', function () {
+Route::get('/gree', function () {
     return view('greeting', ['name' => 'James']);
 });
 Route::get('users', [mainController::class, 'myForm']);
@@ -46,12 +46,19 @@ Route::get('/edit/{id}',[EmployeeController::class, 'edit'])->name('edit');
 Route::put('/update/{id}',[EmployeeController::class,'update'])->name('update');
 Route::delete('/delete/{id}',[EmployeeController::class,'destroy'])->name('delete');
 
-Route::get('/create',[OfficerController::class, 'create']);
+/* Route::group(['prefix' => 'officers','as' => 'officers', 'middleware' => 'auth'],
+function (){ */
+Route::get('/create',[OfficerController::class, 'create'])->middleware('auth');
 Route::post('/store',[OfficerController::class, 'store'])->name('store');
-Route::get('/list',[OfficerController::class, 'index'])->name('list');
+Route::get('/list',[OfficerController::class, 'index'])->name('list')->middleware('auth');
 Route::get('/edit/{id}',[OfficerController::class,'edit'])->name('edit');
 Route::put('/update/{id}',[OfficerController::class,'update'])->name('update');
 Route::delete('/delete/{id}',[OfficerController::class,'destroy'])->name('delete');
+//});
+
+Route::get('/file', [OfficerController::class, 'file'])->name('file');
+Route::post('/image',[OfficerController::class, 'image'])->name('image');
+Route::get('/upload', [OfficerController::class,'upload']);
 
 
 

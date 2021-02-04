@@ -20,6 +20,11 @@
             <option value = "{{$key}}" {{$data['age'] == $key ? 'selected': '' }}>{{$value}}</option>
             @endforeach
         </select><br>
+    <label>ID PROOF</label>
+    <input type = "checkbox" name = "idProof" id = "idProof" value = "{{$data['IdProof']}}">{{$value}}</input>
+    <br>
+    <label>FILE UPLOAD</label>
+    <input type = "file" class = "" value = "{{$data['File']}}" name = "file"><br>
     <label>EMAIL</label>
     <input class = "" type = "email" value = "{{$data['Email']}}" name = "email"> <br>
     <label>PASSWORD</label>

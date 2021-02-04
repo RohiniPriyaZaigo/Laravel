@@ -14,6 +14,8 @@
     <th>Gender</th>
     <th>City</th>
     <th>Age</th>
+    <th>IdProof</th>
+    <th>Image</th>
     <th>Email</th>
     <th>Password</th>
     <th>State</th>
@@ -28,6 +30,8 @@
         <td>{{$user->Gender}}</td>
         <td>{{$user->City}}</td>
         <td>{{$user->Age}}</td>
+        <td>{{$user->IdProof}}</td>
+        <td>{{$user->Image}}</td>
         <td>{{$user->Email}}</td>
         <td>{{$user->Password}}</td>
         <td>{{$user->State}}</td>
@@ -47,6 +51,6 @@
     @empty
     <p> no records</p>
     @endforelse
-    {{$users->links()}}
+     {{$users->links()}}
 </table>
 
