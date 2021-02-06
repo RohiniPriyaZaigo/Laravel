@@ -1,9 +1,12 @@
 <?php
+
 use App\Http\Controllers\mainController;
 use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\OfficerController;
+use App\Http\Controllers\EmpController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StudInsertController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,17 +51,27 @@ Route::delete('/delete/{id}',[EmployeeController::class,'destroy'])->name('delet
 
 /* Route::group(['prefix' => 'officers','as' => 'officers', 'middleware' => 'auth'],
 function (){ */
-Route::get('/create',[OfficerController::class, 'create'])->middleware('auth');
-Route::post('/store',[OfficerController::class, 'store'])->name('store');
-Route::get('/list',[OfficerController::class, 'index'])->name('list')->middleware('auth');
-Route::get('/edit/{id}',[OfficerController::class,'edit'])->name('edit');
-Route::put('/update/{id}',[OfficerController::class,'update'])->name('update');
-Route::delete('/delete/{id}',[OfficerController::class,'destroy'])->name('delete');
+Route::get('/create',[EmpController::class, 'create'])->name('create');
+Route::post('/store',[EmpController::class, 'store'])->name('store');
+Route::get('/list',[EmpController::class, 'index'])->name('list');
+Route::get('/edit/{id}',[EmpController::class,'edit'])->name('edit');
+Route::put('/update/{id}',[EmpController::class,'update'])->name('update');
+Route::delete('/delete/{id}',[EmpController::class,'destroy'])->name('delete');
+
+Route::get('/dashboard',[EmpController::class, 'dashboard'])->name('dashboard');
+Route::get('/admin',[EmpController::class, 'admin'])->name('admin');
+Route::get('/employee',[EmpController::class, 'employee'])->name('employee');
+Route::get('/user',[EmpController::class, 'user'])->name('user');
+Route::get('/manager',[EmpController::class,'manager'])->name('manager');
+Route::get('/role',[EmpController::class,'role']);
+
 //});
 
-Route::get('/file', [OfficerController::class, 'file'])->name('file');
+/* Route::get('/file', [OfficerController::class, 'file'])->name('file');
 Route::post('/image',[OfficerController::class, 'image'])->name('image');
-Route::get('/upload', [OfficerController::class,'upload']);
+Route::get('/upload', [OfficerController::class,'upload']); */
+
+Route::resource('products',[ProductController::class,'product']);
 
 
 
